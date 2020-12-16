@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Naman Gupta",
+        "age": "20",
+        "gender": "Male",
+        "skill": "CP"
+    },
+    {
+        "name": "Hamdan Chaudhary",
+        "age": "20",
+        "gender": "Male",
+        "skill": "Machine Learning"
+    },
+    {
+        "name": "Abhinav Singh",
+        "age": "12",
+        "gender": "Male",
+        "skill": "Gymming"
+    },
+    {
+        "name": "Piyush Awasthi",
+        "age": "20",
+        "gender": "Male",
+        "skill": "Writing"
+    }
+]
