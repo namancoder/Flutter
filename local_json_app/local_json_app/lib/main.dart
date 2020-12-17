@@ -29,6 +29,22 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 //For Decoding Local Json
                 var mydata = jsonDecode(snapshot.data.toString());
+                return ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return new Card(
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          new Text("Name :" + mydata[index]['name']),
+                          new Text("Age :" + mydata[index]['age']),
+                          new Text("Gender :" + mydata[index]['gender']),
+                          new Text("Skill :" + mydata[index]['skill']),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: mydata == null ? 0 : mydata.length,
+                );
               }),
         ),
       ),
