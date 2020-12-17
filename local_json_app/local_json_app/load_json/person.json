@@ -6,21 +6,21 @@
         "skill": "CP"
     },
     {
-        "name": "Hamdan Chaudhary",
-        "age": "20",
+        "name": "Lodu Lalit",
+        "age": "23",
         "gender": "Male",
-        "skill": "Machine Learning"
+        "skill": "Tripathi k liye Marna"
     },
     {
-        "name": "Abhinav Singh",
-        "age": "12",
-        "gender": "Male",
-        "skill": "Gymming"
+        "name": "Pooja Rapper",
+        "age": "16",
+        "gender": "Female",
+        "skill": "Selfie maine leli aaj"
     },
     {
-        "name": "Piyush Awasthi",
-        "age": "20",
+        "name": "Love Babbar",
+        "age": "25",
         "gender": "Male",
-        "skill": "Writing"
+        "skill": "You tuber"
     }
 ]
