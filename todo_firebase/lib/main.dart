@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Colors.red,
-      ),
-      home: MyApp(),
-    ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      brightness: Brightness.light,
+      //primaryColor: Colors.blue,
+      primarySwatch: Colors.blue,
+    ),
+    home: MyApp(),
+  ));
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -16,19 +22,37 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List todos = List();
-  String input = "";
-  @override
-  void initState() {
-    super.initState();
-    todos.add("Item1");
-    todos.add("Item2");
-    todos.add("Item3");
-    todos.add("Item4");
+  String todoTitle = "";
+  //List todos = List();
+
+  createTodos() {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("MyTodos").doc(todoTitle);
+    Map<String, String> todos = {"todoTitle": todoTitle};
+    documentReference.set(todos).whenComplete(() {
+      print("$todoTitle printed");
+    });
   }
+
+  deleteTodos(item) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("MyTodos").doc(todoTitle);
+
+    documentReference.delete();
+  }
+
+  @override
+  // void initState() {
+  //   super.initState();
+  //   todos.add("Item1");
+  //   todos.add("Item2");
+  //   todos.add("Item3");
+  //   todos.add("Item4");
+  // }
 
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: new PreferredSize(
         child: new Container(
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -55,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
         onPressed: () {
           showDialog(
               context: context,
@@ -64,14 +89,12 @@ class _MyAppState extends State<MyApp> {
                       borderRadius: BorderRadius.circular(8)),
                   title: Text("Aaj ka kaam?"),
                   content: TextField(onChanged: (String value) {
-                    input = value;
+                    todoTitle = value;
                   }),
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
-                        setState(() {
-                          todos.add(input);
-                        });
+                        createTodos();
                         Navigator.of(context).pop();
                       },
                       child: Text("add"),
@@ -81,37 +104,47 @@ class _MyAppState extends State<MyApp> {
               });
         },
         child: Icon(
-          Icons.add,
-          color: Colors.white,
+          Icons.plus_one,
+          color: Colors.black38,
         ),
       ),
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Dismissible(
-            key: Key(todos[index]),
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              child: ListTile(
-                title: Text(todos[index]),
-                trailing: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      todos.removeAt(index);
-                    });
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("MyTodos").snapshots(),
+          builder: (context, snapshots) {
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshots.data.documents.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot documentSnapshot =
+                      snapshots.data.documents[index];
+                  return Dismissible(
+                    onDismissed: (direction) {
+                      deleteTodos(documentSnapshot["todoTitle"]);
+                    },
+                    key: Key(documentSnapshot["todoTitle"]),
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      child: ListTile(
+                        title: Text(documentSnapshot["todoTitle"]),
+                        trailing: IconButton(
+                          onPressed: () {
+                            // setState(() {
+                            //   todos.removeAt(index);
+                            // });
+                            deleteTodos(documentSnapshot["todoTitle"]);
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+          }),
     );
   }
 }
