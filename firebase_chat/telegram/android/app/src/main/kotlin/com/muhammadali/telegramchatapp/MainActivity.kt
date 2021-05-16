@@ -1,4 +1,4 @@
-package com.muhammadali.telegramchatapp
+package com.chat.naman
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

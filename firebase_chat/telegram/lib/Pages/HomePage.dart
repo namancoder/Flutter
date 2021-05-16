@@ -21,10 +21,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  TextEditingController searchTextEditingController = TextEditingController();
+
+  homePageHeader() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(
+              Icons.settings,
+              size: 30.0,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Settings()));
+            })
+      ],
+      backgroundColor: Colors.lightBlue,
+      title: Container(
+        margin: new EdgeInsets.only(bottom: 4.0),
+        child: TextFormField(
+          cursorColor: Colors.white,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+          ),
+          controller: searchTextEditingController,
+          decoration: InputDecoration(
+            hintText: "Search Here...",
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            filled: true,
+            prefixIcon: Icon(Icons.person_pin, color: Colors.white, size: 30.0),
+            suffixIcon: IconButton(
+              icon: Icon(
+                Icons.clear,
+                color: Colors.white,
+              ),
+              onPressed: () => searchTextEditingController.clear(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: homePageHeader,
+      appBar: homePageHeader(),
       body: TextButton.icon(
           onPressed: logoutUser,
           icon: Icon(Icons.close),
