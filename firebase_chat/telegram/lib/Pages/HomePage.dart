@@ -56,7 +56,8 @@ class HomeScreenState extends State<HomeScreen> {
               borderSide: BorderSide(color: Colors.white),
             ),
             filled: true,
-            prefixIcon: Icon(Icons.person_pin, color: Colors.white, size: 30.0),
+            prefixIcon: Icon(Icons.person_pin_outlined,
+                color: Colors.white, size: 30.0),
             suffixIcon: IconButton(
               icon: Icon(
                 Icons.clear,
@@ -74,28 +75,29 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homePageHeader(),
-      body: TextButton.icon(
-          onPressed: logoutUser,
-          icon: Icon(Icons.close),
-          label: Text("Sign Out")),
+      //   body: TextButton.icon(
+      //       onPressed: logoutUser,
+      //       icon: Icon(Icons.close),
+      //       label: Text("Sign Out")),
+      // );
+
+      // body:
+      // TextButton.icon(
+      //     onPressed: logoutUser,
+      //     icon: Icon(Icons.close),
+      //     label: Text("Sign Out"));
     );
-
-    body:
-    TextButton.icon(
-        onPressed: logoutUser,
-        icon: Icon(Icons.close),
-        label: Text("Sign Out"));
   }
 
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  Future<Null> logoutUser() async {
-    await FirebaseAuth.instance.signOut();
-    await googleSignIn.disconnect();
-    await googleSignIn.signOut();
+  // final GoogleSignIn googleSignIn = GoogleSignIn();
+  // Future<Null> logoutUser() async {
+  //   await FirebaseAuth.instance.signOut();
+  //   await googleSignIn.disconnect();
+  //   await googleSignIn.signOut();
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => MyApp()), (route) => false);
-  }
+  //   Navigator.of(context).pushAndRemoveUntil(
+  //       MaterialPageRoute(builder: (context) => MyApp()), (route) => false);
+  // }
 }
 
 class UserResult extends StatelessWidget {

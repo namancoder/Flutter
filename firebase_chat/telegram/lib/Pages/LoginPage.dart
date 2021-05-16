@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -116,10 +115,11 @@ class LoginScreenState extends State<LoginScreen> {
 
     FirebaseUser firebaseUser =
         (await firebaseAuth.signInWithCredential(credential)).user;
-        
+
     if (firebaseUser != null) {
       //check if already signed up;
-String Name = firebaseUser.displayName;
+      String nme = firebaseUser.displayName;
+
       final QuerySnapshot resultQuery = await Firestore.instance
           .collection("users")
           .where("id", isEqualTo: firebaseUser.uid)
@@ -152,10 +152,10 @@ String Name = firebaseUser.displayName;
         await preferences.setString(
             "photoUrl", documentSnapshots[0]["photoUrl"]);
         await preferences.setString(
-            "photoUrl", documentSnapshots[0]["aboutMe"]);
+            "aboutMe", documentSnapshots[0]["aboutMe"]);
       }
 
-      Fluttertoast.showToast(msg: "Welcome $Name");
+      Fluttertoast.showToast(msg: "Welcome $nme");
       this.setState(() {
         isLoading = false;
       });
