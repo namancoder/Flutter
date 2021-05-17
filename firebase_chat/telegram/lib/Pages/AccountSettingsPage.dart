@@ -38,7 +38,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  TextEditingController nickNameTextEditingController;
+  TextEditingController  nickNameTextEditingController;
   TextEditingController aboutMeEditingController;
   SharedPreferences preferences;
   String id = "";
@@ -80,6 +80,76 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
 
     //UploadImageto firestore
+    uploadImageToFirestoreAndStorage();
+  }
+
+  Future uploadImageToFirestoreAndStorage() async {
+    String mFileName = id;
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child(mFileName);
+
+    StorageUploadTask storageUploadTask =
+        storageReference.putFile(imageFileAvatar);
+
+    StorageTaskSnapshot storageTaskSnapshot;
+
+    storageUploadTask.onComplete.then((value) {
+      if (value.error == null) {
+        storageTaskSnapshot = value;
+        storageTaskSnapshot.ref.getDownloadURL().then(
+            (valueNewImageDownloadURL) {
+          photoUrl = valueNewImageDownloadURL;
+          Firestore.instance.collection("users").document(id).updateData(
+            {
+              "photoUrl": photoUrl,
+              "aboutMe": aboutMe,
+              "nickname": nickname,
+            },
+          ).then((data) async {
+            await preferences.setString("photoUrl", photoUrl);
+            this.setState(() {
+              isLoading = false;
+            });
+
+            Fluttertoast.showToast(msg: "Updated Successfully");
+          });
+        }, onError: (errorMsg) {
+          this.setState(() {
+            isLoading = false;
+          });
+          Fluttertoast.showToast(msg: errorMsg.toString());
+        });
+      }
+    }, onError: (errorMsg) {
+      setState(() {});
+      Fluttertoast.showToast(msg: errorMsg.toString());
+    });
+  }
+
+  void updateData() {
+    nicknameFocusNode.unfocus();
+    aboutMeFocusNode.unfocus();
+
+    //this.setState(() {});
+    setState(() {
+      isLoading = false;
+    });
+    Firestore.instance.collection("users").document(id).updateData(
+      {
+        "photoUrl": photoUrl,
+        "aboutMe": aboutMe,
+        "nickname": nickname,
+      },
+    ).then((data) async {
+      await preferences.setString("photoUrl", photoUrl);
+      await preferences.setString("aboutMe", aboutMe);
+      await preferences.setString("nickname", nickname);
+      setState(() {
+        isLoading = false;
+      });
+
+      Fluttertoast.showToast(msg: "Updated Successfully");
+    });
   }
 
   @override
@@ -210,7 +280,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                         ),
                         controller: aboutMeEditingController,
                         onChanged: (value) {
-                          aboutMe = value;
+                          this.aboutMe = value;
                         },
                         focusNode: aboutMeFocusNode,
                       ),
@@ -224,8 +294,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                 padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
                 margin: EdgeInsets.only(top: 50.0, bottom: 1.0),
                 child: TextButton(
-                  onPressed: () => print(
-                      "tunuk tunuk tun tunuk tunuk tun tunuk tunuk tun ta ra ra"),
+                  onPressed: updateData, //print(
+                  //"tunuk tunuk tun tunuk tunuk tun tunuk tunuk tun ta ra ra"),
                   child: Text(
                     "Update",
                     style: TextStyle(

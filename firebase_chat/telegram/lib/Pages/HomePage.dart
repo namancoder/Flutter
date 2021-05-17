@@ -17,11 +17,14 @@ class HomeScreen extends StatefulWidget {
   final String currentUserId;
   HomeScreen({Key key, @required this.currentUserId}) : super(key: key);
   @override
-  State createState() => HomeScreenState();
+  State createState() => HomeScreenState(currentUserId: currentUserId);
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  HomeScreenState({Key key, @required this.currentUserId});
   TextEditingController searchTextEditingController = TextEditingController();
+  Future<QuerySnapshot> futureSearchResults;
+  final String currentUserId;
 
   homePageHeader() {
     return AppBar(
@@ -66,15 +69,31 @@ class HomeScreenState extends State<HomeScreen> {
               onPressed: () => searchTextEditingController.clear(),
             ),
           ),
+          onFieldSubmitted: controlSearching,
         ),
       ),
     );
+  }
+
+  controlSearching(String userName) {
+    Future<QuerySnapshot> allFoundUsers = Firestore.instance
+        .collection("users")
+        .where("nickname", isGreaterThanOrEqualTo: userName)
+        .getDocuments();
+
+    setState(() {
+      futureSearchResults = allFoundUsers;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homePageHeader(),
+
+      body: futureSearchResults == null
+          ? displayNoSearchResultScreen()
+          : displayUserFoundScreen(),
       //   body: TextButton.icon(
       //       onPressed: logoutUser,
       //       icon: Icon(Icons.close),
@@ -86,6 +105,53 @@ class HomeScreenState extends State<HomeScreen> {
       //     onPressed: logoutUser,
       //     icon: Icon(Icons.close),
       //     label: Text("Sign Out"));
+    );
+  }
+
+  displayNoSearchResultScreen() {
+    final Orientation orientation = MediaQuery.of(context).orientation;
+    return Container(
+      child: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Icon(Icons.group, color: Colors.lightBlueAccent, size: 200.0),
+            Text(
+              "Search Users",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.lightBlueAccent,
+                fontSize: 50.0,
+                fontWeight: FontWeight.w500,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  displayUserFoundScreen() {
+    return FutureBuilder(
+      future: futureSearchResults,
+      //initialData: InitialData,
+      builder: (context, dataSnapshot) {
+        if (!dataSnapshot.hasData) {
+          return circularProgress();
+        }
+
+        List<UserResult> searchUserResult = [];
+        dataSnapshot.data.documents.forEach((document) {
+          User eachUser = User.fromDocument(document);
+          UserResult userResult = UserResult(eachUser);
+
+          if (currentUserId != document["id"]) {
+            searchUserResult.add(userResult);
+          }
+          //return ListView(children: searchUserResult);
+        });
+        return ListView(children: searchUserResult);
+      },
     );
   }
 
@@ -101,6 +167,40 @@ class HomeScreenState extends State<HomeScreen> {
 }
 
 class UserResult extends StatelessWidget {
+  final User eachUser;
+  UserResult(this.eachUser);
   @override
-  Widget build(BuildContext context) {}
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(4.0),
+      child: Container(
+        color: Colors.white,
+        child: Column(children: <Widget>[
+          GestureDetector(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.black,
+                backgroundImage: CachedNetworkImageProvider(eachUser.photoUrl),
+              ),
+              title: Text(
+                eachUser.nickname,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                "joined" +
+                    DateFormat("dd MMMM, yyyy - hh:mm:aa").format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(eachUser.createdAt),
+                      ),
+                    ),
+              ),
+            ),
+          )
+        ]),
+      ),
+    );
+  }
 }
