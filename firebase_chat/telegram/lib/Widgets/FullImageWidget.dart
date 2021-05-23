@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class FullPhoto extends StatelessWidget {
-
+  final String url;
+  FullPhoto({Key key, @required this.url}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-  }
+  Widget build(BuildContext context) {}
 }
 
 class FullPhotoScreen extends StatefulWidget {
@@ -14,14 +14,11 @@ class FullPhotoScreen extends StatefulWidget {
 }
 
 class FullPhotoScreenState extends State<FullPhotoScreen> {
-
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-
-  }
+  Widget build(BuildContext context) {}
 }

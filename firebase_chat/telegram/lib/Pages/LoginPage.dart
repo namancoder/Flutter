@@ -151,8 +151,7 @@ class LoginScreenState extends State<LoginScreen> {
             "nickname", documentSnapshots[0]["nickname"]);
         await preferences.setString(
             "photoUrl", documentSnapshots[0]["photoUrl"]);
-        await preferences.setString(
-            "aboutMe", documentSnapshots[0]["aboutMe"]);
+        await preferences.setString("aboutMe", documentSnapshots[0]["aboutMe"]);
       }
 
       Fluttertoast.showToast(msg: "Welcome $nme");
