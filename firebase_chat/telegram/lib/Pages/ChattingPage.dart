@@ -14,8 +14,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telegramchatapp/helper/emoji.dart';
 
-
-
 class ChatScreen extends StatefulWidget {
   final String receiverId;
   final String receiverAvatar;
@@ -168,11 +166,10 @@ class ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
-              // TextButton(
-              //   onPressed: () => onSendMessage("mimi7", 2),
-              //   child: Emoji(emoji:"mimi7"),
-              // ),
-              Emoji(num: "7"),
+              TextButton(
+                onPressed: () => onSendMessage("mimi7", 2),
+                child: Emoji(num: "7"),
+              ),
               TextButton(
                 onPressed: () => onSendMessage("mimi8", 2),
                 child: Emoji(num: '8'),
@@ -509,7 +506,7 @@ class ChatScreenState extends State<ChatScreen> {
                 onPressed: getImage,
               ),
             ),
-            color: Colors.white,
+            color: Colors.transparent,
           ),
           //SEND EMOJIS
           Material(
@@ -521,43 +518,38 @@ class ChatScreenState extends State<ChatScreen> {
                 onPressed: () => getSticker(),
               ),
             ),
-            color: Colors.white,
+            color: Colors.transparent,
           ),
 
           Flexible(
             child: Container(
               child: TextField(
-                //cursorHeight : 10.0,
-
                 maxLines: 1,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 15.0,
                 ),
                 controller: textEditingController,
-                //selectionControls: TextSelection.fromPosition(TextPosition(offset: controller.text.length)),
                 decoration: InputDecoration(
-                  isDense: true,
-                  fillColor: Colors.white,
+                  //isDense: true,
+                  labelStyle: TextStyle(color: Colors.red),
+                  // enabledBorder: new UnderlineInputBorder(
+                  //     borderSide: new BorderSide(color: Colors.transparent)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.transparent)),
+
+                  fillColor: Colors.transparent,
                   filled: true,
                 ),
-                // decoration: InputDecoration.collapsed(
-
-                //   filled: true,
-                //   fillColor: Colors.white,
-                //   border: OutlineInputBorder(
-                //     borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                //     borderSide: BorderSide(color: Colors.red, width: 5.0),
-                //   ),
-                //   hintText: "  ...",
-                //   hintStyle: TextStyle(fontSize: 40.0),
-                // ),
+                autofocus: true,
                 focusNode: focusNode,
               ),
             ),
           ),
           Material(
+            color: Colors.transparent,
             child: Container(
+              //color: Colors.transparent,
               margin: EdgeInsets.symmetric(horizontal: 8.0),
               child: IconButton(
                 color: Colors.purple,
@@ -571,12 +563,9 @@ class ChatScreenState extends State<ChatScreen> {
       width: double.infinity,
       height: 40.0,
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.purple, width: 1.5),
-          right: BorderSide(color: Colors.orange, width: 1.5),
-          left: BorderSide(color: Colors.yellow, width: 1.5),
-        ),
-        //color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white),
+        color: Colors.transparent,
       ),
     );
   }
@@ -609,20 +598,9 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Future getImage() async {
-    // imageFile = await ImagePicker.pickImage(source: source)
-
-    // final picker = ImagePicker();
-    // PickedFile nIF = await picker.getImage(source: ImageSource.gallery);
-    // imageFile = File(nIF.path);
-    // if (imageFile != null) isLoading = true;
-    // uploadImageFile();
     imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (imageFile != null) isLoading = true;
     uploadImageFile();
-    // setState(() {
-    //   this. = newImageFile;
-    //   isLoading = true;
-    // });
   }
 
   Future uploadImageFile() async {
