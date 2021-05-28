@@ -6,47 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+//import 'package:telegramchatapp/Models/Emoji.dart';
 import 'package:telegramchatapp/Widgets/FullImageWidget.dart';
 import 'package:telegramchatapp/Widgets/ProgressWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:telegramchatapp/helper/emoji.dart';
 
-class Chat extends StatelessWidget {
-  final String receiverId;
-  final String receiverAvatar;
-  final String receiverName;
-  Chat(
-      {Key key,
-      @required this.receiverId,
-      @required this.receiverAvatar,
-      @required this.receiverName});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.black,
-                backgroundImage: CachedNetworkImageProvider(receiverAvatar),
-              ))
-        ],
-        iconTheme: IconThemeData(color: Colors.black87),
-        title: Text(
-          receiverName,
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
-      body: ChatScreen(
-        receiverId: receiverId,
-        receiverAvatar: receiverAvatar,
-      ),
-    );
-  }
-}
+
 
 class ChatScreen extends StatefulWidget {
   final String receiverId;
@@ -163,32 +131,17 @@ class ChatScreenState extends State<ChatScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi1", 2),
-                child: Image.asset(
-                  "images/mimi1.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: "1"),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi2", 2),
-                child: Image.asset(
-                  "images/mimi2.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '2'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi3", 2),
-                child: Image.asset(
-                  "images/mimi3.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '3'),
               ),
             ],
           ),
@@ -196,32 +149,17 @@ class ChatScreenState extends State<ChatScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi4", 2),
-                child: Image.asset(
-                  "images/mimi4.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '4'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi5", 2),
-                child: Image.asset(
-                  "images/mimi5.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '5'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi6", 2),
-                child: Image.asset(
-                  "images/mimi6.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '6'),
               ),
             ],
           ),
@@ -230,32 +168,18 @@ class ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
-              FlatButton(
-                onPressed: () => onSendMessage("mimi7", 2),
-                child: Image.asset(
-                  "images/mimi7.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
+              // TextButton(
+              //   onPressed: () => onSendMessage("mimi7", 2),
+              //   child: Emoji(emoji:"mimi7"),
+              // ),
+              Emoji(num: "7"),
+              TextButton(
                 onPressed: () => onSendMessage("mimi8", 2),
-                child: Image.asset(
-                  "images/mimi8.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '8'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage("mimi9", 2),
-                child: Image.asset(
-                  "images/mimi9.gif",
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
+                child: Emoji(num: '9'),
               ),
             ],
             //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -361,7 +285,7 @@ class ChatScreenState extends State<ChatScreen> {
                 )
               : document["type"] == 1
                   ? Container(
-                      child: FlatButton(
+                      child: TextButton(
                         child: Material(
                           child: CachedNetworkImage(
                             imageUrl: document['content'],
@@ -477,7 +401,7 @@ class ChatScreenState extends State<ChatScreen> {
                       )
                     : document["type"] == 1
                         ? Container(
-                            child: FlatButton(
+                            child: TextButton(
                               child: Material(
                                 child: CachedNetworkImage(
                                   imageUrl: document['content'],
@@ -603,24 +527,31 @@ class ChatScreenState extends State<ChatScreen> {
           Flexible(
             child: Container(
               child: TextField(
-                maxLines: null,
+                //cursorHeight : 10.0,
+
+                maxLines: 1,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15.0,
                 ),
                 controller: textEditingController,
                 //selectionControls: TextSelection.fromPosition(TextPosition(offset: controller.text.length)),
-
-                decoration: InputDecoration.collapsed(
-                  filled: true,
+                decoration: InputDecoration(
+                  isDense: true,
                   fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: Colors.red, width: 2),
-                  ),
-                  hintText: "...",
-                  hintStyle: TextStyle(fontSize: 40.0),
+                  filled: true,
                 ),
+                // decoration: InputDecoration.collapsed(
+
+                //   filled: true,
+                //   fillColor: Colors.white,
+                //   border: OutlineInputBorder(
+                //     borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                //     borderSide: BorderSide(color: Colors.red, width: 5.0),
+                //   ),
+                //   hintText: "  ...",
+                //   hintStyle: TextStyle(fontSize: 40.0),
+                // ),
                 focusNode: focusNode,
               ),
             ),
@@ -642,7 +573,6 @@ class ChatScreenState extends State<ChatScreen> {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: Colors.purple, width: 1.5),
-          bottom: BorderSide(color: Colors.red, width: 1.5),
           right: BorderSide(color: Colors.orange, width: 1.5),
           left: BorderSide(color: Colors.yellow, width: 1.5),
         ),
@@ -670,8 +600,8 @@ class ChatScreenState extends State<ChatScreen> {
         });
       });
       listScrollController.animateTo(
-          listScrollController.position.maxScrollExtent,
-          duration: Duration(microseconds: 300),
+          listScrollController.position.minScrollExtent,
+          duration: Duration(microseconds: 400),
           curve: Curves.easeOut);
     } else {
       Fluttertoast.showToast(msg: "Empty message cannot be send");
