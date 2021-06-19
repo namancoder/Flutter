@@ -82,7 +82,7 @@ class LoginScreenState extends State<LoginScreen> {
                         image: DecorationImage(
                           image: AssetImage(
                               "assets/images/google_signin_button.png"),
-                          fit: BoxFit.fill,
+                          //fit: BoxFit.fill,
                         ),
                       ),
                     ),

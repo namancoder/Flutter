@@ -1,14 +1,9 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:telegramchatapp/Models/chat_model.dart';
 import 'package:telegramchatapp/Models/user.dart';
 
-import 'package:telegramchatapp/Pages/ChattingPage.dart';
-//import 'package:telegramchatapp/models/user.dart';
 import 'package:telegramchatapp/models/user_list.dart';
 import 'package:telegramchatapp/Pages/AccountSettingsPage.dart';
 
@@ -29,7 +24,14 @@ class HomeScreenState extends State<HomeScreen>
 
   homePageHeader() {
     return AppBar(
-      //toolbarHeight: 90.0,
+      toolbarHeight: 50.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          
+          bottom: Radius.circular(30),
+        ),
+      ),
+      elevation: 5,
       automaticallyImplyLeading: false,
       actions: <Widget>[
         IconButton(
@@ -40,7 +42,7 @@ class HomeScreenState extends State<HomeScreen>
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Settings()));
-            })
+            }),
       ],
       backgroundColor: Colors.deepPurple,
       title: Container(
@@ -60,7 +62,7 @@ class HomeScreenState extends State<HomeScreen>
               borderSide: BorderSide(color: Colors.grey),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
             filled: true,
             prefixIcon: Icon(Icons.person_pin_outlined,
@@ -99,7 +101,6 @@ class HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homePageHeader(),
-      // appBar: buildFloatingSearchBar(),
 
       body: futureSearchResults == null ||
               searchTextEditingController.value == null
@@ -109,7 +110,6 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   displayNoSearchResultScreen() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
         child: ListView(
@@ -120,7 +120,7 @@ class HomeScreenState extends State<HomeScreen>
               "Search Users",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.deepOrange[900],
+                color: Colors.purple[900],
                 fontSize: 50.0,
                 fontWeight: FontWeight.w500,
               ),

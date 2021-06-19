@@ -533,8 +533,7 @@ class ChatScreenState extends State<ChatScreen> {
                 decoration: InputDecoration(
                   //isDense: true,
                   labelStyle: TextStyle(color: Colors.red),
-                  // enabledBorder: new UnderlineInputBorder(
-                  //     borderSide: new BorderSide(color: Colors.transparent)),
+       
                   focusedBorder: UnderlineInputBorder(
                       borderSide: new BorderSide(color: Colors.transparent)),
 
